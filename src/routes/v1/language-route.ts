@@ -26,7 +26,7 @@ languageRouter.put(
 );
 
 // ------------------------ PATCH --------------------------
-languageRouter.patch("/:id", langaugeController.updateActiveStatus);
+languageRouter.patch("/:id/status", langaugeController.updateActiveStatus);
 
 // ------------------------ DELETE --------------------------
 languageRouter.delete("/:id", langaugeController.deleteLanguage);
