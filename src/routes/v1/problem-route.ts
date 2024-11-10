@@ -53,6 +53,9 @@ problemRouter.put(
   problemController.updateProblemCode,
 );
 
+// ------------------------ PATCH --------------------------
+problemRouter.patch("/:slug/status", problemController.updateActiveStatus);
+
 // ------------------------ DELETE --------------------------
 problemRouter.delete("/:slug", problemController.deleteProblem);
 problemRouter.delete("/testcase/:id", problemController.deleteProblemTestcase);

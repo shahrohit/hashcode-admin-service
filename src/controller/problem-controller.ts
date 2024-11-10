@@ -187,6 +187,26 @@ const updateProblemCode = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
+// ------------------------ PATCH --------------------------
+const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Problem Not Found");
+
+    const isActive = req.query.isActive === "true" ? true : false;
+
+    await problemService.updateActiveStatus(slug, isActive);
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: UPDATED,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ------------------------ DELETE --------------------------
 const deleteProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -256,6 +276,7 @@ const langaugeController = {
   updateProblem,
   updateProblemTestcase,
   updateProblemCode,
+  updateActiveStatus,
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,

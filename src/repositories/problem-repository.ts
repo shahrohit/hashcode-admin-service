@@ -109,6 +109,16 @@ const updateProblemCode = async (id: number, data: TProblemLangCode) => {
   });
 };
 
+// ------------------------ PATCH --------------------------
+const updateActiveStatus = async (slug: string, isActive: boolean) => {
+  await prisma.problem.update({
+    where: { slug: slug },
+    data: {
+      isActive: isActive,
+    },
+  });
+};
+
 // ------------------------ DELETE --------------------------
 const deleteProblem = async (slug: string, data: TProblem) => {
   await prisma.problem.delete({
@@ -139,6 +149,7 @@ const problemRepository = {
   updateProblem,
   updateProblemTestcase,
   updateProblemCode,
+  updateActiveStatus,
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,

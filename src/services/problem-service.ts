@@ -48,6 +48,11 @@ const updateProblemCode = async (id: number, data: TProblemLangCode) => {
   return await problemRepository.updateProblemCode(id, data);
 };
 
+// ------------------------ PATCH --------------------------
+const updateActiveStatus = async (slug: string, isActive: boolean) => {
+  return await problemRepository.updateActiveStatus(slug, isActive);
+};
+
 // ------------------------ DELETE --------------------------
 const deleteProblem = async (slug: string, data: TProblem) => {
   return await problemRepository.deleteProblem(slug, data);
@@ -72,6 +77,7 @@ const problemService = {
   updateProblem,
   updateProblemTestcase,
   updateProblemCode,
+  updateActiveStatus,
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,
