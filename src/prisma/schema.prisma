@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// languages table
+model Language {
+  id Int @id @default(autoincrement())
+  name String
+  version String
+  extension String
+  compileCmd String?   
+  executeCmd String    
+  options String?  
+  isActive Boolean @default(true)
+  codes Code[]    
+}
+
+// problems table
+model Problem {
+  id              Int        @id @default(autoincrement())
+  title           String
+  slug            String     @unique
+  difficulty      Difficulty
+  description     String     @db.Text
+  sampleTestcases String[]
+  parameterName   String
+  editorial       String?    @db.Text
+  memoryLimit     Float        
+  timeLimit       Float
+  isActive        Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  codes          Code[]
+  testcases      Testcase[]
+  topics         Topic[]     @relation("ProblemTopics") // Relation to Topic
+}
+
+// codes table
+model Code {
+  id           Int      @id @default(autoincrement())
+  problemId    Int
+  langId       Int
+  starterCode  String   @db.Text
+  driverCode   String   @db.Text
+  solutionCode String   @db.Text
+
+  problem      Problem  @relation(fields: [problemId], references: [id])
+  language     Language @relation(fields: [langId], references: [id])
+
+  @@index([problemId])
+  @@index([langId])
+  @@unique([problemId, langId])
+}
+
+// testcases table
+model Testcase {
+  id         Int      @id @default(autoincrement())
+  problemId  Int
+  input      String   @db.Text
+  output     String   @db.Text
+
+  problem    Problem @relation(fields: [problemId], references: [id])
+
+  @@index([problemId])
+}
+
+model Topic {
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String    @unique
+  problems  Problem[] @relation("ProblemTopics") // Relation to Problem
+
+  @@index([slug])
+}
+
+// Enum for difficulty levels
+enum Difficulty {
+  Basic
+  Easy
+  Medium
+  Hard
+}
