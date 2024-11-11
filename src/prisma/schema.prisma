@@ -85,3 +85,16 @@ enum Difficulty {
   Medium
   Hard
 }
+
+// Admin Table
+model Admin {
+    id                Int       @id @default(autoincrement())
+    email             String    @unique
+    hashedPassword    String
+    lastLogin         DateTime?
+    lastLoginAddress  String?
+    createdAt         DateTime  @default(now())
+    updatedAt         DateTime  @updatedAt
+
+    @@index([email])
+}
