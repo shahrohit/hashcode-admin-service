@@ -89,8 +89,9 @@ enum Difficulty {
 // Admin Table
 model Admin {
     id                Int       @id @default(autoincrement())
+    name              String
     email             String    @unique
-    hashedPassword    String
+    password          String
     lastLogin         DateTime?
     lastLoginAddress  String?
     createdAt         DateTime  @default(now())
