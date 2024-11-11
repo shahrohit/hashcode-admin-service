@@ -66,6 +66,23 @@ const createProblemCode = async (req: Req, res: Res, next: NextFn) => {
 };
 
 // ------------------------ GET --------------------------
+const searchProblems = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const query = req.query.query as string;
+    const response = query
+      ? await problemService.searchProblems(query)
+      : await problemService.getProblems();
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 const getProblems = async (_: Req, res: Res, next: NextFn) => {
   try {
     const response = await problemService.getProblems();
@@ -269,6 +286,7 @@ const langaugeController = {
   createProblem,
   createProblemTestcase,
   createProblemCode,
+  searchProblems,
   getProblems,
   getProblem,
   getProblemTestcases,

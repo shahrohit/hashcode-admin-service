@@ -30,6 +30,7 @@ problemRouter.post(
 
 // ------------------------ GET --------------------------
 problemRouter.get("/", problemController.getProblems);
+problemRouter.get("/search", problemController.searchProblems);
 problemRouter.get("/:slug", problemController.getProblem);
 problemRouter.get("/:id/testcases", problemController.getProblemTestcases);
 problemRouter.get("/:id/codes", problemController.getProblemCodes);

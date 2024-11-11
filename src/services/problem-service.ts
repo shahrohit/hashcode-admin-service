@@ -19,6 +19,9 @@ const createProblemCode = async (data: TProblemLangCode) => {
 };
 
 // ------------------------ GET --------------------------
+const searchProblems = async (query: string) => {
+  return problemRepository.searchProblems(query);
+};
 const getProblems = async () => {
   return problemRepository.getProblems();
 };
@@ -68,6 +71,7 @@ const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
 
 const problemService = {
   createProblem,
+  searchProblems,
   getProblems,
   getProblem,
   createProblemTestcase,

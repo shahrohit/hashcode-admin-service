@@ -37,6 +37,45 @@ const createProblemCode = async (data: TProblemLangCode) => {
 };
 
 // ------------------------ GET --------------------------
+const searchProblems = async (query: string) => {
+  if (!isNaN(+query)) {
+    return await prisma.problem.findMany({
+      where: {
+        OR: [
+          { id: +query },
+          { title: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        difficulty: true,
+        isActive: true,
+        memoryLimit: true,
+        timeLimit: true,
+        topics: true,
+      },
+    });
+  }
+
+  return await prisma.problem.findMany({
+    where: {
+      title: { contains: query, mode: "insensitive" },
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      difficulty: true,
+      isActive: true,
+      memoryLimit: true,
+      timeLimit: true,
+      topics: true,
+    },
+  });
+};
+
 const getProblems = async () => {
   return await prisma.problem.findMany({
     select: {
@@ -140,6 +179,7 @@ const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
 
 const problemRepository = {
   createProblem,
+  searchProblems,
   getProblems,
   getProblem,
   getProblemTestcases,
