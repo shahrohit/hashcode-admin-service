@@ -1,3 +1,4 @@
+import { ACCESS_TOKEN } from "@/config/server-config";
 import { verifyToken } from "@utils/fn";
 
 import {
@@ -8,11 +9,8 @@ import {
 
 const verifyLogin = async (req: Req, _: Res, next: NextFn) => {
   try {
-    const token =
-      req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
-
-    verifyToken(token);
-
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+    verifyToken(token, ACCESS_TOKEN);
     next();
   } catch (error) {
     next(error);

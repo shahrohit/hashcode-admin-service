@@ -9,5 +9,7 @@ const authRouter = express.Router();
 // ------------------------ POST --------------------------
 authRouter.post("/register", validate(registerSchema), authController.register);
 authRouter.post("/login", validate(loginSchema), authController.login);
+authRouter.post("/logout", authController.login);
+authRouter.post("/refresh", authController.refreshAccessToken);
 
 export default authRouter;

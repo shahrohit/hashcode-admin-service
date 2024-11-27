@@ -19,12 +19,16 @@ export const verifyPassword = async (
 };
 
 // ----------------- JWT Token -------------------------------
-export const generateToken = (email: string) => {
-  return jwt.sign({ email: email }, ACCESS_TOKEN);
+export const generateToken = (
+  payload: any,
+  TOKEN_SECRET: string,
+  expiresIn: string,
+) => {
+  return jwt.sign(payload, TOKEN_SECRET, { expiresIn });
 };
 
-export const verifyToken = (token: any) => {
+export const verifyToken = (token: any, SECRET: string) => {
   if (!token) throw new Unauthorized("Access Denied");
-  const decode = jwt.verify(token, ACCESS_TOKEN) as jwt.JwtPayload;
+  const decode = jwt.verify(token, SECRET) as jwt.JwtPayload;
   return decode.email as string;
 };

@@ -23,9 +23,10 @@ function errorHandler(err: Error, req: Req, res: Res, next: NextFn) {
     res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
       statusCode: StatusCodes.UNAUTHORIZED,
-      name: "JWT_EXPIRED",
+      name: "TOKEN_EXPIRED",
       message: "Login Session Expired",
     });
+    return;
   }
 
   if (err instanceof PrismaClientKnownRequestError) {
