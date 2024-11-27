@@ -44,7 +44,7 @@ const login = async (req: Req, res: Res, next: NextFn) => {
     const accessToken = generateToken(
       { email: response.email },
       ACCESS_TOKEN,
-      "60000ms",
+      "15m",
     );
 
     res.cookie("refreshToken", refreshtoken, {
@@ -70,7 +70,7 @@ const refreshAccessToken = async (req: Req, res: Res, next: NextFn) => {
     const refreshToken = req.cookies?.refreshToken;
     const email = verifyToken(refreshToken, REFRESH_TOKEN);
 
-    const newAccessToken = generateToken({ email }, ACCESS_TOKEN, "60000ms");
+    const newAccessToken = generateToken({ email }, ACCESS_TOKEN, "15m");
 
     // issue a new refresh token (token rotation)
     const newRefreshToken = generateToken({ email }, REFRESH_TOKEN, "7d");
