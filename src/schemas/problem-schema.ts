@@ -25,16 +25,15 @@ const problemSchema = z.object({
     .min(1, "Parameter Name is Required"),
 
   memoryLimit: z.coerce
-    .number({ message: "Required Number" })
+    .number({ message: "Required Memory" })
     .positive("Required Positive Value"),
 
   timeLimit: z.coerce
-    .number({ message: "Required Number" })
+    .number({ message: "Required TimeLimit" })
     .positive("Required Positive Value"),
 });
 
 export const problemLangCodeSchema = z.object({
-  problemId: ID,
   langId: ID,
   starterCode: z.string().min(1, "Starter Code is Required"),
   driverCode: z.string().min(1, "Driver Code is Required"),
@@ -42,7 +41,6 @@ export const problemLangCodeSchema = z.object({
 });
 
 export const problemTestcaseSchema = z.object({
-  problemId: ID,
   input: z.string().min(1, "Input is Required"),
   output: z.string().min(1, "Output is Required"),
 });

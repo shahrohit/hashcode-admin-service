@@ -22,18 +22,31 @@ const createProblem = async (data: TProblem) => {
   });
 };
 
-const createProblemTestcase = async (data: TProblemTestcase) => {
-  await prisma.testcase.create({ data });
+const createProblemTestcase = async (
+  problemId: number,
+  data: TProblemTestcase,
+) => {
+  await prisma.testcase.create({
+    data: {
+      ...data,
+      problemId,
+    },
+  });
 };
 
-const createProblemCode = async (data: TProblemLangCode) => {
+const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
   const problem = await prisma.code.findFirst({
-    where: { problemId: data.problemId, langId: data.langId },
+    where: { problemId, langId: data.langId },
   });
 
   if (problem) throw new Conflict("Problem Code Already Exist");
 
-  await prisma.code.create({ data });
+  await prisma.code.create({
+    data: {
+      ...data,
+      problemId,
+    },
+  });
 };
 
 // ------------------------ GET --------------------------
@@ -130,10 +143,7 @@ const updateProblem = async (slug: string, data: TProblem) => {
 const updateProblemTestcase = async (id: number, data: TProblemTestcase) => {
   await prisma.testcase.update({
     where: { id: id },
-    data: {
-      input: data.input,
-      output: data.output,
-    },
+    data,
   });
 };
 

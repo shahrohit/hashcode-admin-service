@@ -21,17 +21,17 @@ const getTopic = async (slug: string) => {
 };
 
 // ------------------------ PUT --------------------------
-const updateTopic = async (id: number, data: TTopic) => {
+const updateTopic = async (slug: string, data: TTopic) => {
   await prisma.topic.update({
-    where: { id: id },
+    where: { slug: slug },
     data: data,
   });
 };
 
 // ------------------------ DELETE --------------------------
-const deleteTopic = async (id: number) => {
+const deleteTopic = async (slug: string) => {
   await prisma.topic.delete({
-    where: { id: id },
+    where: { slug: slug },
   });
 };
 

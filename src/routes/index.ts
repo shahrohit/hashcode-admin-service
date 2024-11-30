@@ -1,9 +1,12 @@
 import express from "express";
 
-import v1Router from "@routes/v1/index";
+import verifyAdmin from "@validations/login-validation";
+import authRouter from "@routes/auth-route";
+import adminRouter from "@routes/admin/index";
 
 const apiRouter = express.Router();
 
-apiRouter.use("/v1", v1Router);
+apiRouter.use("/auth", authRouter);
+apiRouter.use("/admin", verifyAdmin, adminRouter);
 
 export default apiRouter;

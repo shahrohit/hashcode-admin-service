@@ -1,12 +1,10 @@
 import topicRepository from "@repositories/topic-repository";
 import { TTopic } from "@schemas/topic-schema";
 
-// ------------------------ POST --------------------------
 const createTopic = async (data: TTopic) => {
   return await topicRepository.createTopic(data);
 };
 
-// ------------------------ GET --------------------------
 const getTopics = async () => {
   return topicRepository.getTopics();
 };
@@ -15,14 +13,12 @@ const getTopic = async (slug: string) => {
   return await topicRepository.getTopic(slug);
 };
 
-// ------------------------ PUT --------------------------
-const updateTopic = async (id: number, data: TTopic) => {
-  return await topicRepository.updateTopic(id, data);
+const updateTopic = async (slug: string, data: TTopic) => {
+  return await topicRepository.updateTopic(slug, data);
 };
 
-// ------------------------ DELETE --------------------------
-const deleteTopic = async (id: number) => {
-  return await topicRepository.deleteTopic(id);
+const deleteTopic = async (slug: string) => {
+  return await topicRepository.deleteTopic(slug);
 };
 
 const topicService = {

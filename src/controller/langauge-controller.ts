@@ -7,9 +7,10 @@ import { StatusCodes } from "http-status-codes";
 
 import langaugeService from "@services/language-service";
 import checkPrimaryKey from "@utils/check-primaryKey";
-import { CREATED, DELETED, GET, UPDATED } from "@utils/constants";
+import { CREATED, DELETED, GET, UPDATED } from "@utils/strings";
 
 import { type TLanguage } from "@schemas/language-schema";
+import { BadRequest } from "@utils/errors";
 
 const createLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -28,7 +29,6 @@ const createLanguage = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ POST --------------------------
 const getLanguages = async (_: Req, res: Res, next: NextFn) => {
   try {
     const response = await langaugeService.getLanguages();
@@ -44,7 +44,6 @@ const getLanguages = async (_: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ GET --------------------------
 const getLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
     const id = checkPrimaryKey(req.params.id);
@@ -62,7 +61,6 @@ const getLanguage = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ PUT --------------------------
 const updateLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
     const id = checkPrimaryKey(req.params.id);
@@ -81,12 +79,14 @@ const updateLanguage = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ PATCH --------------------------
 const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
   try {
     const id = checkPrimaryKey(req.params.id);
 
-    const isActive = req.query.isActive === "true" ? true : false;
+    let isActive: boolean;
+    if (req.query.isActive === "true") isActive = true;
+    else if (req.query.isActive === "false") isActive = false;
+    else throw new BadRequest("Invalid Data Provided");
 
     await langaugeService.updateActiveStatus(id, isActive);
 
@@ -100,7 +100,6 @@ const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ DELETE --------------------------
 const deleteLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
     const id = checkPrimaryKey(req.params.id);

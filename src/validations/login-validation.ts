@@ -1,5 +1,5 @@
-import { ACCESS_TOKEN } from "@/config/server-config";
-import { verifyToken } from "@utils/fn";
+import { Unauthorized } from "@/utils/errors";
+import { ADMIN, ROLE_HEADER } from "@/utils/strings";
 
 import {
   NextFunction as NextFn,
@@ -7,14 +7,14 @@ import {
   Response as Res,
 } from "express";
 
-const verifyLogin = async (req: Req, _: Res, next: NextFn) => {
+const verifyAdmin = async (req: Req, _: Res, next: NextFn) => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-    verifyToken(token, ACCESS_TOKEN);
-    next();
+    const role = req.headers[ROLE_HEADER];
+    if (role === ADMIN) return next();
+    else throw new Unauthorized("ACCESS DENIED");
   } catch (error) {
     next(error);
   }
 };
 
-export default verifyLogin;
+export default verifyAdmin;

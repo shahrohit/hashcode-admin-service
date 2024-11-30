@@ -6,9 +6,8 @@ import {
 import { StatusCodes } from "http-status-codes";
 
 import topicService from "@services/topic-service";
-import checkPrimaryKey from "@utils/check-primaryKey";
 import { NotFound } from "@utils/errors";
-import { CREATED, DELETED, GET, UPDATED } from "@utils/constants";
+import { CREATED, DELETED, GET, UPDATED } from "@/utils/strings";
 
 import { type TTopic } from "@schemas/topic-schema";
 
@@ -29,7 +28,6 @@ const createTopic = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ POST --------------------------
 const getTopics = async (_: Req, res: Res, next: NextFn) => {
   try {
     const response = await topicService.getTopics();
@@ -45,11 +43,10 @@ const getTopics = async (_: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ GET --------------------------
 const getTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
-    if (!slug) throw new NotFound("Topic doesnot Eixst");
+    if (!slug) throw new NotFound("Topic doesnot Exist");
 
     const response = await topicService.getTopic(slug);
 
@@ -64,14 +61,14 @@ const getTopic = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ PUT --------------------------
 const updateTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Topic doesnot Exist");
 
     const data = req.body as TTopic;
 
-    await topicService.updateTopic(id, data);
+    await topicService.updateTopic(slug, data);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -83,12 +80,12 @@ const updateTopic = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ DELETE --------------------------
 const deleteTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Topic doesnot Exist");
 
-    await topicService.deleteTopic(id);
+    await topicService.deleteTopic(slug);
 
     res.status(StatusCodes.OK).json({
       succcess: true,

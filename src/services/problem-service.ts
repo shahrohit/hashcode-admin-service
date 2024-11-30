@@ -5,20 +5,21 @@ import {
   TProblemTestcase,
 } from "@schemas/problem-schema";
 
-// ------------------------ POST --------------------------
 const createProblem = async (data: TProblem) => {
   return await problemRepository.createProblem(data);
 };
 
-const createProblemTestcase = async (data: TProblemTestcase) => {
-  return await problemRepository.createProblemTestcase(data);
+const createProblemTestcase = async (
+  problemId: number,
+  data: TProblemTestcase,
+) => {
+  return await problemRepository.createProblemTestcase(problemId, data);
 };
 
-const createProblemCode = async (data: TProblemLangCode) => {
-  return await problemRepository.createProblemCode(data);
+const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
+  return await problemRepository.createProblemCode(problemId, data);
 };
 
-// ------------------------ GET --------------------------
 const searchProblems = async (query: string) => {
   return problemRepository.searchProblems(query);
 };
@@ -38,7 +39,6 @@ const getProblemCodes = async (problemId: number) => {
   return await problemRepository.getProblemCodes(problemId);
 };
 
-// ------------------------ PUT --------------------------
 const updateProblem = async (slug: string, data: TProblem) => {
   return await problemRepository.updateProblem(slug, data);
 };
@@ -51,12 +51,10 @@ const updateProblemCode = async (id: number, data: TProblemLangCode) => {
   return await problemRepository.updateProblemCode(id, data);
 };
 
-// ------------------------ PATCH --------------------------
 const updateActiveStatus = async (slug: string, isActive: boolean) => {
   return await problemRepository.updateActiveStatus(slug, isActive);
 };
 
-// ------------------------ DELETE --------------------------
 const deleteProblem = async (slug: string, data: TProblem) => {
   return await problemRepository.deleteProblem(slug, data);
 };

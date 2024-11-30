@@ -2,12 +2,10 @@ import prisma from "@config/db-config";
 import { NotFound } from "@utils/errors";
 import { TLanguage } from "@schemas/language-schema";
 
-// ------------------------ POST --------------------------
 const createLanguage = async (data: TLanguage) => {
   await prisma.language.create({ data });
 };
 
-// ------------------------ GET --------------------------
 const getLanguages = async () => {
   return await prisma.language.findMany();
 };
@@ -18,7 +16,6 @@ const getLanguage = async (id: number) => {
   return langauge;
 };
 
-// ------------------------ PUT --------------------------
 const updateLanguage = async (id: number, data: TLanguage) => {
   await prisma.language.update({
     where: { id: id },
@@ -26,7 +23,6 @@ const updateLanguage = async (id: number, data: TLanguage) => {
   });
 };
 
-// ------------------------ PATCH --------------------------
 const updateActiveStatus = async (id: number, isActive: boolean) => {
   await prisma.language.update({
     where: { id: id },
@@ -36,7 +32,6 @@ const updateActiveStatus = async (id: number, isActive: boolean) => {
   });
 };
 
-// ------------------------ DELETE --------------------------
 const deleteLanguage = async (id: number) => {
   await prisma.language.delete({
     where: { id: id },

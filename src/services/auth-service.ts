@@ -1,7 +1,6 @@
 import { TLoginAdmin, TRegisterAdmin } from "@schemas/auth-schema";
 import authRepository from "@repositories/auth-repository";
 
-// ------------------------ POST --------------------------
 const register = async (data: TRegisterAdmin) => {
   return await authRepository.register(data);
 };

@@ -13,7 +13,6 @@ export default class BaseError extends Error {
 
 export class BadRequest extends BaseError {
   constructor(message: string) {
-    // const name = ;
     super(BadRequest.name, StatusCodes.BAD_REQUEST, message);
   }
 }

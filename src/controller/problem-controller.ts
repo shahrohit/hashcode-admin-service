@@ -7,8 +7,8 @@ import { StatusCodes } from "http-status-codes";
 
 import problemService from "@services/problem-service";
 import checkPrimaryKey from "@utils/check-primaryKey";
-import { NotFound } from "@utils/errors";
-import { CREATED, DELETED, GET, UPDATED } from "@utils/constants";
+import { BadRequest, NotFound } from "@utils/errors";
+import { CREATED, DELETED, GET, UPDATED } from "@/utils/strings";
 
 import {
   type TProblem,
@@ -16,7 +16,6 @@ import {
   type TProblemTestcase,
 } from "@schemas/problem-schema";
 
-// ------------------------ POST --------------------------
 const createProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
     const body = req.body as TProblem;
@@ -35,8 +34,10 @@ const createProblem = async (req: Req, res: Res, next: NextFn) => {
 
 const createProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
   try {
+    const problemId = checkPrimaryKey(req.params.problemId);
     const body = req.body as TProblemTestcase;
-    await problemService.createProblemTestcase(body);
+
+    await problemService.createProblemTestcase(problemId, body);
 
     res.status(StatusCodes.CREATED).json({
       succcess: true,
@@ -51,8 +52,10 @@ const createProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
 
 const createProblemCode = async (req: Req, res: Res, next: NextFn) => {
   try {
+    const problemId = checkPrimaryKey(req.params.problemId);
     const body = req.body as TProblemLangCode;
-    await problemService.createProblemCode(body);
+
+    await problemService.createProblemCode(problemId, body);
 
     res.status(StatusCodes.CREATED).json({
       succcess: true,
@@ -65,7 +68,6 @@ const createProblemCode = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ GET --------------------------
 const searchProblems = async (req: Req, res: Res, next: NextFn) => {
   try {
     const query = req.query.query as string;
@@ -117,7 +119,7 @@ const getProblem = async (req: Req, res: Res, next: NextFn) => {
 };
 const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.id);
+    const problemId = checkPrimaryKey(req.params.problemId);
     const response = await problemService.getProblemTestcases(problemId);
 
     res.status(StatusCodes.OK).json({
@@ -132,7 +134,7 @@ const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
 };
 const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.id);
+    const problemId = checkPrimaryKey(req.params.problemId);
     const response = await problemService.getProblemCodes(problemId);
 
     res.status(StatusCodes.OK).json({
@@ -146,7 +148,6 @@ const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ PUT --------------------------
 const updateProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
@@ -204,13 +205,15 @@ const updateProblemCode = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ PATCH --------------------------
 const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
     if (!slug) throw new NotFound("Problem Not Found");
 
-    const isActive = req.query.isActive === "true" ? true : false;
+    let isActive: boolean;
+    if (req.query.isActive === "true") isActive = true;
+    else if (req.query.isActive === "false") isActive = false;
+    else throw new BadRequest("Invalid Data Provided");
 
     await problemService.updateActiveStatus(slug, isActive);
 
@@ -224,7 +227,6 @@ const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ DELETE --------------------------
 const deleteProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
