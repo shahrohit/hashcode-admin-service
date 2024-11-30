@@ -24,7 +24,8 @@
       "@repositories/*": ["./src/repositories/*"],
       "@utils/*": ["./src/utils/*"],
       "@validations/*": ["./src/validations/*"],
-      "@schemas/*": ["./src/schemas/*"]
+      "@schemas/*": ["./src/schemas/*"],
+      "@middlewares/*": ["./src/middlewares/*"]
     }
   },
   "tsc-alias": {
