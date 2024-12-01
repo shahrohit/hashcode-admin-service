@@ -38,6 +38,16 @@ const deleteLanguage = async (id: number) => {
   });
 };
 
+// ---------------------- User ------------------------
+const getUserLanguages = async () => {
+  return await prisma.language.findMany({
+    select: {
+      name: true,
+      version: true,
+    },
+  });
+};
+
 const langaugeRepository = {
   createLanguage,
   getLanguages,
@@ -45,6 +55,7 @@ const langaugeRepository = {
   updateLanguage,
   updateActiveStatus,
   deleteLanguage,
+  getUserLanguages,
 };
 
 export default langaugeRepository;

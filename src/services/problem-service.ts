@@ -23,6 +23,7 @@ const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
 const searchProblems = async (query: string) => {
   return problemRepository.searchProblems(query);
 };
+
 const getProblems = async () => {
   return problemRepository.getProblems();
 };
@@ -67,6 +68,17 @@ const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
   return await problemRepository.deleteProblemCode(id, data);
 };
 
+// --------------------- User --------------------------
+const searchUserProblems = async (query: string) => {
+  return problemRepository.searchUserProblems(query);
+};
+const getUserProblems = async () => {
+  return problemRepository.getUserProblems();
+};
+
+const getUserProblem = async (slug: string) => {
+  return await problemRepository.getUserProblem(slug);
+};
 const problemService = {
   createProblem,
   searchProblems,
@@ -83,6 +95,9 @@ const problemService = {
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,
+  searchUserProblems,
+  getUserProblems,
+  getUserProblem,
 };
 
 export default problemService;

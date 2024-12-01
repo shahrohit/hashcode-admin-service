@@ -116,6 +116,21 @@ const deleteLanguage = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
+// ------------------------- USER --------------------------------------
+const getUserLanguage = async (_: Req, res: Res, next: NextFn) => {
+  try {
+    const response = await langaugeService.getUserLanguages();
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const langaugeController = {
   createLanguage,
   getLanguages,
@@ -123,6 +138,7 @@ const langaugeController = {
   updateLanguage,
   updateActiveStatus,
   deleteLanguage,
+  getUserLanguage,
 };
 
 export default langaugeController;

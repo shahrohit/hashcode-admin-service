@@ -97,12 +97,27 @@ const deleteTopic = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
+const getUserTopics = async (_: Req, res: Res, next: NextFn) => {
+  try {
+    const response = await topicService.getUserTopics();
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 const topicController = {
   createTopic,
   getTopics,
   getTopic,
   updateTopic,
   deleteTopic,
+  getUserTopics,
 };
 
 export default topicController;

@@ -2,14 +2,12 @@ import prisma from "@config/db-config";
 import { Conflict, NotFound } from "@utils/errors";
 import { TTopic } from "@schemas/topic-schema";
 
-// ------------------------ POST --------------------------
 const createTopic = async (data: TTopic) => {
   const topic = await prisma.topic.findUnique({ where: { slug: data.slug } });
   if (topic) throw new Conflict("Topic Already Exist");
   await prisma.topic.create({ data });
 };
 
-// ------------------------ GET --------------------------
 const getTopics = async () => {
   return await prisma.topic.findMany();
 };
@@ -20,7 +18,6 @@ const getTopic = async (slug: string) => {
   return topic;
 };
 
-// ------------------------ PUT --------------------------
 const updateTopic = async (slug: string, data: TTopic) => {
   await prisma.topic.update({
     where: { slug: slug },
@@ -28,10 +25,19 @@ const updateTopic = async (slug: string, data: TTopic) => {
   });
 };
 
-// ------------------------ DELETE --------------------------
 const deleteTopic = async (slug: string) => {
   await prisma.topic.delete({
     where: { slug: slug },
+  });
+};
+
+// -------------------------------- User -----------------------
+const getUserTopics = async () => {
+  return await prisma.topic.findMany({
+    select: {
+      name: true,
+      slug: true,
+    },
   });
 };
 
@@ -41,6 +47,7 @@ const topicRepository = {
   getTopic,
   updateTopic,
   deleteTopic,
+  getUserTopics,
 };
 
 export default topicRepository;

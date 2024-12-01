@@ -85,6 +85,7 @@ const searchProblems = async (req: Req, res: Res, next: NextFn) => {
     next(error);
   }
 };
+
 const getProblems = async (_: Req, res: Res, next: NextFn) => {
   try {
     const response = await problemService.getProblems();
@@ -117,6 +118,7 @@ const getProblem = async (req: Req, res: Res, next: NextFn) => {
     next(error);
   }
 };
+
 const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
   try {
     const problemId = checkPrimaryKey(req.params.problemId);
@@ -132,6 +134,7 @@ const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
     next(error);
   }
 };
+
 const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   try {
     const problemId = checkPrimaryKey(req.params.problemId);
@@ -284,6 +287,58 @@ const deleteProblemCode = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
+// --------------------------------- User ----------------------------
+const searchUserProblems = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const query = req.query.query as string;
+    const response = query
+      ? await problemService.searchUserProblems(query)
+      : await problemService.getUserProblems();
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserProblems = async (_: Req, res: Res, next: NextFn) => {
+  try {
+    const response = await problemService.getUserProblems();
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserProblem = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Problem Doesnot Exist");
+
+    const response = await problemService.getUserProblem(slug);
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const langaugeController = {
   createProblem,
   createProblemTestcase,
@@ -300,6 +355,9 @@ const langaugeController = {
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,
+  searchUserProblems,
+  getUserProblems,
+  getUserProblem,
 };
 
 export default langaugeController;

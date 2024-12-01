@@ -21,12 +21,16 @@ const deleteTopic = async (slug: string) => {
   return await topicRepository.deleteTopic(slug);
 };
 
+const getUserTopics = async () => {
+  return topicRepository.getUserTopics();
+};
 const topicService = {
   createTopic,
   getTopics,
   getTopic,
   updateTopic,
   deleteTopic,
+  getUserTopics,
 };
 
 export default topicService;

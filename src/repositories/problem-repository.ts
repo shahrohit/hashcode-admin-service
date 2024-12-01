@@ -7,7 +7,6 @@ import {
   type TProblemTestcase,
 } from "@schemas/problem-schema";
 
-// ------------------------ POST --------------------------
 const createProblem = async (data: TProblem) => {
   const problem = await prisma.problem.findUnique({
     where: { slug: data.slug },
@@ -49,7 +48,6 @@ const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
   });
 };
 
-// ------------------------ GET --------------------------
 const searchProblems = async (query: string) => {
   if (!isNaN(+query)) {
     return await prisma.problem.findMany({
@@ -129,7 +127,6 @@ const getProblemCodes = async (problemId: number) => {
   });
 };
 
-// ------------------------ PUT --------------------------
 const updateProblem = async (slug: string, data: TProblem) => {
   await prisma.problem.update({
     where: { slug: slug },
@@ -158,7 +155,6 @@ const updateProblemCode = async (id: number, data: TProblemLangCode) => {
   });
 };
 
-// ------------------------ PATCH --------------------------
 const updateActiveStatus = async (slug: string, isActive: boolean) => {
   await prisma.problem.update({
     where: { slug: slug },
@@ -168,7 +164,6 @@ const updateActiveStatus = async (slug: string, isActive: boolean) => {
   });
 };
 
-// ------------------------ DELETE --------------------------
 const deleteProblem = async (slug: string, data: TProblem) => {
   await prisma.problem.delete({
     where: { slug: slug },
@@ -187,6 +182,86 @@ const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
   });
 };
 
+// ---------------------- User -----------------------------------
+const searchUserProblems = async (query: string) => {
+  if (!isNaN(+query)) {
+    return await prisma.problem.findMany({
+      where: {
+        OR: [
+          { id: +query },
+          { title: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        title: true,
+        slug: true,
+        difficulty: true,
+        topics: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+      },
+    });
+  }
+
+  return await prisma.problem.findMany({
+    where: {
+      title: { contains: query, mode: "insensitive" },
+    },
+    select: {
+      title: true,
+      slug: true,
+      difficulty: true,
+      topics: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
+};
+
+const getUserProblems = async () => {
+  return await prisma.problem.findMany({
+    select: {
+      title: true,
+      slug: true,
+      difficulty: true,
+      topics: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
+};
+
+const getUserProblem = async (slug: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      title: true,
+      slug: true,
+      difficulty: true,
+      description: true,
+      topics: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+      sampleTestcases: true,
+      parameterName: true,
+    },
+  });
+  if (!problem) throw new NotFound("Problem Not Found");
+  return problem;
+};
+
 const problemRepository = {
   createProblem,
   searchProblems,
@@ -203,6 +278,9 @@ const problemRepository = {
   deleteProblem,
   deleteProblemTestcase,
   deleteProblemCode,
+  searchUserProblems,
+  getUserProblems,
+  getUserProblem,
 };
 
 export default problemRepository;
