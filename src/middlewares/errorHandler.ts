@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import BaseError from "@utils/errors";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-function errorHandler(err: Error, req: Req, res: Res, next: NextFn) {
+function errorHandler(err: Error, _: Req, res: Res, __: NextFn) {
   if (err instanceof BaseError) {
     res.status(err.statusCode).json({
       success: false,

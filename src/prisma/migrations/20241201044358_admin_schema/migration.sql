@@ -66,6 +66,20 @@ CREATE TABLE "Topic" (
 );
 
 -- CreateTable
+CREATE TABLE "Admin" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "lastLogin" TIMESTAMP(3),
+    "lastLoginAddress" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_ProblemTopics" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -91,6 +105,12 @@ CREATE UNIQUE INDEX "Topic_slug_key" ON "Topic"("slug");
 
 -- CreateIndex
 CREATE INDEX "Topic_slug_idx" ON "Topic"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
+
+-- CreateIndex
+CREATE INDEX "Admin_email_idx" ON "Admin"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ProblemTopics_AB_unique" ON "_ProblemTopics"("A", "B");

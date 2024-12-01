@@ -3,7 +3,6 @@ import { Conflict, Unauthorized } from "@utils/errors";
 import { TLoginAdmin, TRegisterAdmin } from "@schemas/auth-schema";
 import { generateHashPassword, verifyPassword } from "@utils/fn";
 
-// ------------------------ POST --------------------------
 const register = async (data: TRegisterAdmin) => {
   const admin = await prisma.admin.findUnique({ where: { email: data.email } });
   if (admin) throw new Conflict("Admin Already Exist");
@@ -39,9 +38,9 @@ const login = async (data: TLoginAdmin) => {
   });
 };
 
-const adminRepository = {
+const authRepository = {
   register,
   login,
 };
 
-export default adminRepository;
+export default authRepository;

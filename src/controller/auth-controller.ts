@@ -6,15 +6,14 @@ import {
 import { StatusCodes } from "http-status-codes";
 
 import { TLoginAdmin, TRegisterAdmin } from "@schemas/auth-schema";
-import adminService from "@services/auth-service";
+import authService from "@services/auth-service";
 import { ADMIN, CREATED } from "@/utils/strings";
 
-// ------------------------ Register Admin --------------------------
 const register = async (req: Req, res: Res, next: NextFn) => {
   try {
     const body = req.body as TRegisterAdmin;
 
-    await adminService.register(body);
+    await authService.register(body);
 
     res.status(StatusCodes.CREATED).json({
       succcess: true,
@@ -27,11 +26,10 @@ const register = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-// ------------------------ Login As Admin --------------------------
 const login = async (req: Req, res: Res, next: NextFn) => {
   try {
     const body = req.body as TLoginAdmin;
-    const response = await adminService.login(body);
+    const response = await authService.login(body);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -44,9 +42,9 @@ const login = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-const adminController = {
+const authController = {
   register,
   login,
 };
 
-export default adminController;
+export default authController;
