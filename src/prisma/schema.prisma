@@ -11,12 +11,7 @@ datasource db {
 model Language {
   id Int @id @default(autoincrement())
   name String
-  version String
-  extension String
-  compileCmd String?   
-  executeCmd String    
-  options String?  
-  isActive Boolean @default(true)
+  lang String @unique
   codes Code[]    
 }
 
@@ -29,8 +24,7 @@ model Problem {
   description     String     @db.Text
   sampleTestcases String[]
   parameterName   String
-  editorial       String?    @db.Text
-  memoryLimit     Float        
+  editorial       String?    @db.Text      
   timeLimit       Float
   isActive        Boolean    @default(false)
   createdAt       DateTime   @default(now())

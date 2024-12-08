@@ -34,10 +34,11 @@ const createProblem = async (req: Req, res: Res, next: NextFn) => {
 
 const createProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.problemId);
+    const slug = req.params.slug;
     const body = req.body as TProblemTestcase;
+    if (!slug) throw new NotFound("Problem Not Found");
 
-    await problemService.createProblemTestcase(problemId, body);
+    await problemService.createProblemTestcase(slug, body);
 
     res.status(StatusCodes.CREATED).json({
       succcess: true,
@@ -52,10 +53,12 @@ const createProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
 
 const createProblemCode = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.problemId);
+    const slug = req.params.slug;
+    const langId = checkPrimaryKey(req.params.langId);
     const body = req.body as TProblemLangCode;
+    if (!slug) throw new NotFound("Problem Not Found");
 
-    await problemService.createProblemCode(problemId, body);
+    await problemService.createProblemCode(slug, langId, body);
 
     res.status(StatusCodes.CREATED).json({
       succcess: true,
@@ -121,8 +124,10 @@ const getProblem = async (req: Req, res: Res, next: NextFn) => {
 
 const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.problemId);
-    const response = await problemService.getProblemTestcases(problemId);
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Problem Not Found");
+
+    const response = await problemService.getProblemTestcases(slug);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -137,8 +142,11 @@ const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
 
 const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const problemId = checkPrimaryKey(req.params.problemId);
-    const response = await problemService.getProblemCodes(problemId);
+    const slug = req.params.slug;
+    const langId = checkPrimaryKey(req.params.langId);
+    if (!slug) throw new NotFound("Problem Not Found");
+
+    const response = await problemService.getProblemCodes(slug, langId);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -153,11 +161,11 @@ const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
 
 const updateProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const slug = req.params.slug;
-    if (!slug) throw new NotFound("Problem Not Found");
+    const id = checkPrimaryKey(req.params.slug);
+    if (!id) throw new NotFound("Problem Not Found");
 
     const body = req.body as TProblem;
-    await problemService.updateProblem(slug, body);
+    await problemService.updateProblem(id, body);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -321,12 +329,46 @@ const getUserProblems = async (_: Req, res: Res, next: NextFn) => {
   }
 };
 
-const getUserProblem = async (req: Req, res: Res, next: NextFn) => {
+const getUserProblemDescription = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
     if (!slug) throw new NotFound("Problem Doesnot Exist");
 
-    const response = await problemService.getUserProblem(slug);
+    const response = await problemService.getUserProblemDescription(slug);
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getUserSampleTestcase = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Problem Doesnot Exist");
+
+    const response = await problemService.getUserSampleTestcase(slug);
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getUserProblemCodes = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const slug = req.params.slug;
+    if (!slug) throw new NotFound("Problem Not Found");
+
+    const response = await problemService.getUserProblemCodes(slug);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -357,7 +399,9 @@ const langaugeController = {
   deleteProblemCode,
   searchUserProblems,
   getUserProblems,
-  getUserProblem,
+  getUserProblemDescription,
+  getUserSampleTestcase,
+  getUserProblemCodes,
 };
 
 export default langaugeController;

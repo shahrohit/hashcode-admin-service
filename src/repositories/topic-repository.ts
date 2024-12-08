@@ -18,27 +18,41 @@ const getTopic = async (slug: string) => {
   return topic;
 };
 
-const updateTopic = async (slug: string, data: TTopic) => {
+const updateTopic = async (id: number, data: TTopic) => {
   await prisma.topic.update({
-    where: { slug: slug },
+    where: { id },
     data: data,
   });
 };
 
-const deleteTopic = async (slug: string) => {
+const deleteTopic = async (id: number) => {
   await prisma.topic.delete({
-    where: { slug: slug },
+    where: { id },
   });
 };
 
 // -------------------------------- User -----------------------
 const getUserTopics = async () => {
-  return await prisma.topic.findMany({
-    select: {
-      name: true,
-      slug: true,
+  const topics = await prisma.topic.findMany({
+    include: {
+      _count: {
+        select: {
+          problems: {
+            where: {
+              isActive: true,
+            },
+          },
+        },
+      },
     },
   });
+
+  const a = topics.map(topic => ({
+    name: topic.name,
+    slug: topic.slug,
+    count: topic._count.problems, // Get the count of problems
+  }));
+  return a;
 };
 
 const topicRepository = {

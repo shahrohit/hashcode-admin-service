@@ -79,27 +79,6 @@ const updateLanguage = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
-const updateActiveStatus = async (req: Req, res: Res, next: NextFn) => {
-  try {
-    const id = checkPrimaryKey(req.params.id);
-
-    let isActive: boolean;
-    if (req.query.isActive === "true") isActive = true;
-    else if (req.query.isActive === "false") isActive = false;
-    else throw new BadRequest("Invalid Data Provided");
-
-    await langaugeService.updateActiveStatus(id, isActive);
-
-    res.status(StatusCodes.OK).json({
-      succcess: true,
-      statusCode: StatusCodes.OK,
-      message: UPDATED,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 const deleteLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
     const id = checkPrimaryKey(req.params.id);
@@ -136,7 +115,6 @@ const langaugeController = {
   getLanguages,
   getLanguage,
   updateLanguage,
-  updateActiveStatus,
   deleteLanguage,
   getUserLanguage,
 };

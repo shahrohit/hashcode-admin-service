@@ -23,15 +23,6 @@ const updateLanguage = async (id: number, data: TLanguage) => {
   });
 };
 
-const updateActiveStatus = async (id: number, isActive: boolean) => {
-  await prisma.language.update({
-    where: { id: id },
-    data: {
-      isActive: isActive,
-    },
-  });
-};
-
 const deleteLanguage = async (id: number) => {
   await prisma.language.delete({
     where: { id: id },
@@ -43,7 +34,7 @@ const getUserLanguages = async () => {
   return await prisma.language.findMany({
     select: {
       name: true,
-      version: true,
+      lang: true,
     },
   });
 };
@@ -53,7 +44,6 @@ const langaugeRepository = {
   getLanguages,
   getLanguage,
   updateLanguage,
-  updateActiveStatus,
   deleteLanguage,
   getUserLanguages,
 };

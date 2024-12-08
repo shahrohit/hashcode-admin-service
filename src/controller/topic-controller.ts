@@ -10,6 +10,7 @@ import { NotFound } from "@utils/errors";
 import { CREATED, DELETED, GET, UPDATED } from "@/utils/strings";
 
 import { type TTopic } from "@schemas/topic-schema";
+import checkPrimaryKey from "@/utils/check-primaryKey";
 
 const createTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -63,12 +64,12 @@ const getTopic = async (req: Req, res: Res, next: NextFn) => {
 
 const updateTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const slug = req.params.slug;
-    if (!slug) throw new NotFound("Topic doesnot Exist");
+    const id = checkPrimaryKey(req.params.slug);
+    if (!id) throw new NotFound("Topic doesnot Exist");
 
     const data = req.body as TTopic;
 
-    await topicService.updateTopic(slug, data);
+    await topicService.updateTopic(id, data);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -82,10 +83,10 @@ const updateTopic = async (req: Req, res: Res, next: NextFn) => {
 
 const deleteTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const slug = req.params.slug;
-    if (!slug) throw new NotFound("Topic doesnot Exist");
+    const id = checkPrimaryKey(req.params.slug);
+    if (!id) throw new NotFound("Topic doesnot Exist");
 
-    await topicService.deleteTopic(slug);
+    await topicService.deleteTopic(id);
 
     res.status(StatusCodes.OK).json({
       succcess: true,

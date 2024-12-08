@@ -21,29 +21,49 @@ const createProblem = async (data: TProblem) => {
   });
 };
 
-const createProblemTestcase = async (
-  problemId: number,
-  data: TProblemTestcase,
-) => {
+const createProblemTestcase = async (slug: string, data: TProblemTestcase) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!problem) throw new NotFound("Problem Doesnot Exist");
+
   await prisma.testcase.create({
     data: {
       ...data,
-      problemId,
+      problemId: problem.id,
     },
   });
 };
 
-const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
-  const problem = await prisma.code.findFirst({
-    where: { problemId, langId: data.langId },
+const createProblemCode = async (
+  slug: string,
+  langId: number,
+  data: TProblemLangCode,
+) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
+    },
   });
 
-  if (problem) throw new Conflict("Problem Code Already Exist");
+  if (!problem) throw new NotFound("Problem Doesnot Exist");
+
+  const code = await prisma.code.findFirst({
+    where: { problemId: problem.id, langId },
+  });
+
+  if (code) throw new Conflict("Problem Code Already Exist");
 
   await prisma.code.create({
     data: {
       ...data,
-      problemId,
+      problemId: problem.id,
+      langId,
     },
   });
 };
@@ -63,7 +83,6 @@ const searchProblems = async (query: string) => {
         slug: true,
         difficulty: true,
         isActive: true,
-        memoryLimit: true,
         timeLimit: true,
         topics: true,
       },
@@ -80,7 +99,6 @@ const searchProblems = async (query: string) => {
       slug: true,
       difficulty: true,
       isActive: true,
-      memoryLimit: true,
       timeLimit: true,
       topics: true,
     },
@@ -95,9 +113,10 @@ const getProblems = async () => {
       slug: true,
       difficulty: true,
       isActive: true,
-      memoryLimit: true,
       timeLimit: true,
       topics: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
@@ -113,26 +132,42 @@ const getProblem = async (slug: string) => {
   return problem;
 };
 
-const getProblemTestcases = async (problemId: number) => {
-  return await prisma.testcase.findMany({
-    where: { problemId: problemId },
-  });
-};
-const getProblemCodes = async (problemId: number) => {
-  return await prisma.code.findMany({
-    where: { problemId: problemId },
-    include: {
-      language: true,
+const getProblemTestcases = async (slug: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
     },
+  });
+
+  if (!problem) throw new NotFound("Problem Doesnot Exist");
+
+  return await prisma.testcase.findMany({
+    where: { problemId: problem.id },
   });
 };
 
-const updateProblem = async (slug: string, data: TProblem) => {
-  await prisma.problem.update({
+const getProblemCodes = async (slug: string, langId: number) => {
+  const problem = await prisma.problem.findUnique({
     where: { slug: slug },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!problem) throw new NotFound("Problem Doesnot Exist");
+
+  return await prisma.code.findFirst({
+    where: { problemId: problem.id, langId },
+  });
+};
+
+const updateProblem = async (id: number, data: TProblem) => {
+  await prisma.problem.update({
+    where: { id: id },
     data: {
       ...data,
-      topics: { connect: data.topics.map(topic => ({ id: topic })) },
+      topics: { set: data.topics.map(topic => ({ id: topic })) },
     },
   });
 };
@@ -226,7 +261,9 @@ const searchUserProblems = async (query: string) => {
 
 const getUserProblems = async () => {
   return await prisma.problem.findMany({
+    where: { isActive: true },
     select: {
+      id: true,
       title: true,
       slug: true,
       difficulty: true,
@@ -240,10 +277,11 @@ const getUserProblems = async () => {
   });
 };
 
-const getUserProblem = async (slug: string) => {
+const getUserProblemDescription = async (slug: string) => {
   const problem = await prisma.problem.findUnique({
-    where: { slug: slug },
+    where: { slug: slug, isActive: true },
     select: {
+      id: true,
       title: true,
       slug: true,
       difficulty: true,
@@ -254,12 +292,52 @@ const getUserProblem = async (slug: string) => {
           slug: true,
         },
       },
+    },
+  });
+  if (!problem) throw new NotFound("Problem Not Found");
+  return problem;
+};
+
+const getUserSampleTestcase = async (slug: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug, isActive: true },
+    select: {
       sampleTestcases: true,
       parameterName: true,
     },
   });
   if (!problem) throw new NotFound("Problem Not Found");
   return problem;
+};
+
+const getUserProblemCodes = async (slug: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!problem) throw new NotFound("Problem Doesnot Exist");
+
+  const codes = await prisma.code.findMany({
+    where: { problemId: problem.id },
+    select: {
+      language: {
+        select: {
+          lang: true,
+        },
+      },
+      starterCode: true,
+    },
+  });
+
+  const response: { [lang: string]: string } = {};
+  codes.forEach(code => {
+    response[code.language.lang] = code.starterCode;
+  });
+
+  return response;
 };
 
 const problemRepository = {
@@ -280,7 +358,9 @@ const problemRepository = {
   deleteProblemCode,
   searchUserProblems,
   getUserProblems,
-  getUserProblem,
+  getUserProblemDescription,
+  getUserSampleTestcase,
+  getUserProblemCodes,
 };
 
 export default problemRepository;

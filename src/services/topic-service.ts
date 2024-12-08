@@ -13,12 +13,12 @@ const getTopic = async (slug: string) => {
   return await topicRepository.getTopic(slug);
 };
 
-const updateTopic = async (slug: string, data: TTopic) => {
-  return await topicRepository.updateTopic(slug, data);
+const updateTopic = async (id: number, data: TTopic) => {
+  return await topicRepository.updateTopic(id, data);
 };
 
-const deleteTopic = async (slug: string) => {
-  return await topicRepository.deleteTopic(slug);
+const deleteTopic = async (id: number) => {
+  return await topicRepository.deleteTopic(id);
 };
 
 const getUserTopics = async () => {

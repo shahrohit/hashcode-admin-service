@@ -17,8 +17,4 @@ languageRouter
   .put(validate(languageSchema), langaugeController.updateLanguage)
   .delete(langaugeController.deleteLanguage);
 
-languageRouter
-  .route("/:id/status")
-  .patch(langaugeController.updateActiveStatus);
-
 export default languageRouter;

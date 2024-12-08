@@ -18,10 +18,6 @@ const updateLanguage = async (id: number, data: TLanguage) => {
   return await langaugeRepository.updateLanguage(id, data);
 };
 
-const updateActiveStatus = async (id: number, isActive: boolean) => {
-  return await langaugeRepository.updateActiveStatus(id, isActive);
-};
-
 const deleteLanguage = async (id: number) => {
   return await langaugeRepository.deleteLanguage(id);
 };
@@ -36,7 +32,6 @@ const langaugeService = {
   getLanguages,
   getLanguage,
   updateLanguage,
-  updateActiveStatus,
   deleteLanguage,
   getUserLanguages,
 };

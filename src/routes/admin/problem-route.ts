@@ -34,7 +34,7 @@ problemRouter
   .delete(problemController.deleteProblem);
 
 problemRouter
-  .route("/:problemId/testcases")
+  .route("/:slug/testcases")
   .post(
     validate(problemTestcaseSchema),
     problemController.createProblemTestcase,
@@ -42,12 +42,12 @@ problemRouter
   .get(problemController.getProblemTestcases);
 
 problemRouter
-  .route("/:problemId/codes")
-  .post(validate(problemLangCodeSchema), problemController.createProblemCode)
-  .get(problemController.getProblemCodes);
-
-problemRouter
   .route("/:slug/status")
   .patch(problemController.updateActiveStatus);
+
+problemRouter
+  .route("/:slug/:langId/codes")
+  .post(validate(problemLangCodeSchema), problemController.createProblemCode)
+  .get(problemController.getProblemCodes);
 
 export default problemRouter;

@@ -9,15 +9,16 @@ const createProblem = async (data: TProblem) => {
   return await problemRepository.createProblem(data);
 };
 
-const createProblemTestcase = async (
-  problemId: number,
-  data: TProblemTestcase,
-) => {
-  return await problemRepository.createProblemTestcase(problemId, data);
+const createProblemTestcase = async (slug: string, data: TProblemTestcase) => {
+  return await problemRepository.createProblemTestcase(slug, data);
 };
 
-const createProblemCode = async (problemId: number, data: TProblemLangCode) => {
-  return await problemRepository.createProblemCode(problemId, data);
+const createProblemCode = async (
+  slug: string,
+  langId: number,
+  data: TProblemLangCode,
+) => {
+  return await problemRepository.createProblemCode(slug, langId, data);
 };
 
 const searchProblems = async (query: string) => {
@@ -32,16 +33,16 @@ const getProblem = async (slug: string) => {
   return await problemRepository.getProblem(slug);
 };
 
-const getProblemTestcases = async (problemId: number) => {
-  return await problemRepository.getProblemTestcases(problemId);
+const getProblemTestcases = async (slug: string) => {
+  return await problemRepository.getProblemTestcases(slug);
 };
 
-const getProblemCodes = async (problemId: number) => {
-  return await problemRepository.getProblemCodes(problemId);
+const getProblemCodes = async (slug: string, langId: number) => {
+  return await problemRepository.getProblemCodes(slug, langId);
 };
 
-const updateProblem = async (slug: string, data: TProblem) => {
-  return await problemRepository.updateProblem(slug, data);
+const updateProblem = async (id: number, data: TProblem) => {
+  return await problemRepository.updateProblem(id, data);
 };
 
 const updateProblemTestcase = async (id: number, data: TProblemTestcase) => {
@@ -76,9 +77,17 @@ const getUserProblems = async () => {
   return problemRepository.getUserProblems();
 };
 
-const getUserProblem = async (slug: string) => {
-  return await problemRepository.getUserProblem(slug);
+const getUserProblemDescription = async (slug: string) => {
+  return await problemRepository.getUserProblemDescription(slug);
 };
+const getUserSampleTestcase = async (slug: string) => {
+  return await problemRepository.getUserSampleTestcase(slug);
+};
+
+const getUserProblemCodes = async (slug: string) => {
+  return await problemRepository.getUserProblemCodes(slug);
+};
+
 const problemService = {
   createProblem,
   searchProblems,
@@ -97,7 +106,9 @@ const problemService = {
   deleteProblemCode,
   searchUserProblems,
   getUserProblems,
-  getUserProblem,
+  getUserProblemDescription,
+  getUserSampleTestcase,
+  getUserProblemCodes,
 };
 
 export default problemService;
