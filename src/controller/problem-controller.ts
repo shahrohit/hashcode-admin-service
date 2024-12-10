@@ -381,6 +381,27 @@ const getUserProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   }
 };
 
+// ----------- submission --------------
+const getProblemForSubmission = async (req: Req, res: Res, next: NextFn) => {
+  try {
+    const slug = req.params.slug;
+    const lang = req.params.lang;
+    if (!slug) throw new NotFound("Problem Doesnot Exist");
+    if (!lang) throw new NotFound("Language Doesnot Exist");
+
+    const response = await problemService.getProblemForSubmission(slug, lang);
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: response,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const langaugeController = {
   createProblem,
   createProblemTestcase,
@@ -402,6 +423,7 @@ const langaugeController = {
   getUserProblemDescription,
   getUserSampleTestcase,
   getUserProblemCodes,
+  getProblemForSubmission,
 };
 
 export default langaugeController;

@@ -35,7 +35,7 @@ const login = async (req: Req, res: Res, next: NextFn) => {
       succcess: true,
       statusCode: StatusCodes.OK,
       message: "Logged In",
-      data: { ...response, role: ADMIN },
+      data: { ...response, username: "ADMIN", role: ADMIN },
     });
   } catch (error) {
     next(error);

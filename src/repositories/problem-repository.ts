@@ -340,6 +340,58 @@ const getUserProblemCodes = async (slug: string) => {
   return response;
 };
 
+// --------------- Submission -------------
+const getProblemForSubmission = async (slug: string, lang: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
+      timeLimit: true,
+    },
+  });
+  if (!problem) throw new NotFound("Problem Not Found");
+
+  const language = await prisma.language.findUnique({
+    where: {
+      lang,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (!language) throw new NotFound("Language Not Found");
+
+  const codes = await prisma.code.findFirst({
+    where: {
+      problemId: problem.id,
+      langId: language.id,
+    },
+    select: {
+      driverCode: true,
+    },
+  });
+
+  if (!codes) throw new NotFound("Problem Code Doesnot Exist");
+
+  const testcases = await prisma.testcase.findMany({
+    where: { problemId: problem.id },
+    select: {
+      input: true,
+      output: true,
+    },
+  });
+
+  const response = {
+    id: problem.id,
+    language: lang,
+    code: codes.driverCode,
+    testcases: testcases,
+    timeLimit: problem.timeLimit,
+  };
+
+  return response;
+};
+
 const problemRepository = {
   createProblem,
   searchProblems,
@@ -361,6 +413,7 @@ const problemRepository = {
   getUserProblemDescription,
   getUserSampleTestcase,
   getUserProblemCodes,
+  getProblemForSubmission,
 };
 
 export default problemRepository;
