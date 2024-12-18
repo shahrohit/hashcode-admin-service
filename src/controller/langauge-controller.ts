@@ -110,6 +110,26 @@ const getUserLanguage = async (_: Req, res: Res, next: NextFn) => {
   }
 };
 
+// ------------ get Languages for submission
+const getSubmissionLanguages = async (_: Req, res: Res, next: NextFn) => {
+  try {
+    const response = await langaugeService.getLanguages();
+    const result: { [id: string]: string } = {};
+    response.forEach(language => {
+      result[language.id] = language.name;
+    });
+
+    res.status(StatusCodes.OK).json({
+      succcess: true,
+      statusCode: StatusCodes.OK,
+      message: GET,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const langaugeController = {
   createLanguage,
   getLanguages,
@@ -117,6 +137,7 @@ const langaugeController = {
   updateLanguage,
   deleteLanguage,
   getUserLanguage,
+  getSubmissionLanguages,
 };
 
 export default langaugeController;

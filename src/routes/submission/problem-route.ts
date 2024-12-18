@@ -8,4 +8,8 @@ SproblemRouter.route("/submit/:slug/:lang").get(
   problemController.getProblemForSubmission,
 );
 
+SproblemRouter.route("/run/:slug/:lang").get(
+  problemController.getProblemForRun,
+);
+
 export default SproblemRouter;

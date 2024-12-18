@@ -222,12 +222,14 @@ const searchUserProblems = async (query: string) => {
   if (!isNaN(+query)) {
     return await prisma.problem.findMany({
       where: {
+        isActive: true,
         OR: [
           { id: +query },
           { title: { contains: query, mode: "insensitive" } },
         ],
       },
       select: {
+        id: true,
         title: true,
         slug: true,
         difficulty: true,
@@ -243,9 +245,11 @@ const searchUserProblems = async (query: string) => {
 
   return await prisma.problem.findMany({
     where: {
+      isActive: true,
       title: { contains: query, mode: "insensitive" },
     },
     select: {
+      id: true,
       title: true,
       slug: true,
       difficulty: true,
@@ -383,9 +387,54 @@ const getProblemForSubmission = async (slug: string, lang: string) => {
 
   const response = {
     id: problem.id,
+    langId: language.id,
     language: lang,
     code: codes.driverCode,
     testcases: testcases,
+    timeLimit: problem.timeLimit,
+  };
+
+  return response;
+};
+const getProblemForRun = async (slug: string, lang: string) => {
+  const problem = await prisma.problem.findUnique({
+    where: { slug: slug },
+    select: {
+      id: true,
+      timeLimit: true,
+    },
+  });
+  if (!problem) throw new NotFound("Problem Not Found");
+
+  const language = await prisma.language.findUnique({
+    where: {
+      lang,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (!language) throw new NotFound("Language Not Found");
+
+  const codes = await prisma.code.findFirst({
+    where: {
+      problemId: problem.id,
+      langId: language.id,
+    },
+    select: {
+      driverCode: true,
+      solutionCode: true,
+    },
+  });
+
+  if (!codes) throw new NotFound("Problem Code Doesnot Exist");
+
+  const response = {
+    id: problem.id,
+    langId: language.id,
+    language: lang,
+    code: codes.driverCode,
+    solutionCode: codes.solutionCode,
     timeLimit: problem.timeLimit,
   };
 
@@ -414,6 +463,7 @@ const problemRepository = {
   getUserSampleTestcase,
   getUserProblemCodes,
   getProblemForSubmission,
+  getProblemForRun,
 };
 
 export default problemRepository;

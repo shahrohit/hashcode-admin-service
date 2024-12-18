@@ -1,4 +1,4 @@
-import { Unauthorized } from "@/utils/errors";
+import { Forbidden, Unauthorized } from "@/utils/errors";
 import { ADMIN, ROLE_HEADER } from "@/utils/strings";
 
 import {
@@ -11,7 +11,7 @@ const verifyAdmin = async (req: Req, _: Res, next: NextFn) => {
   try {
     const role = req.headers[ROLE_HEADER];
     if (role === ADMIN) return next();
-    else throw new Unauthorized("ACCESS DENIED");
+    else throw new Forbidden("ACCESS DENIED");
   } catch (error) {
     next(error);
   }

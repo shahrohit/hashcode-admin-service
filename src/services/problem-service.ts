@@ -92,6 +92,9 @@ const getUserProblemCodes = async (slug: string) => {
 const getProblemForSubmission = async (slug: string, lang: string) => {
   return await problemRepository.getProblemForSubmission(slug, lang);
 };
+const getProblemForRun = async (slug: string, lang: string) => {
+  return await problemRepository.getProblemForRun(slug, lang);
+};
 
 const problemService = {
   createProblem,
@@ -115,6 +118,7 @@ const problemService = {
   getUserSampleTestcase,
   getUserProblemCodes,
   getProblemForSubmission,
+  getProblemForRun,
 };
 
 export default problemService;
