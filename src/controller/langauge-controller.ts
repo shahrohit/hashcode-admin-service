@@ -6,11 +6,10 @@ import {
 import { StatusCodes } from "http-status-codes";
 
 import langaugeService from "@services/language-service";
-import checkPrimaryKey from "@utils/check-primaryKey";
 import { CREATED, DELETED, GET, UPDATED } from "@utils/strings";
 
 import { type TLanguage } from "@schemas/language-schema";
-import { BadRequest } from "@utils/errors";
+import checkPrimarykey from "@utils/check-primarykey";
 
 const createLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -46,7 +45,7 @@ const getLanguages = async (_: Req, res: Res, next: NextFn) => {
 
 const getLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
 
     const response = await langaugeService.getLanguage(id);
 
@@ -63,7 +62,7 @@ const getLanguage = async (req: Req, res: Res, next: NextFn) => {
 
 const updateLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
 
     const data = req.body as TLanguage;
 
@@ -81,7 +80,7 @@ const updateLanguage = async (req: Req, res: Res, next: NextFn) => {
 
 const deleteLanguage = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
 
     await langaugeService.deleteLanguage(id);
 

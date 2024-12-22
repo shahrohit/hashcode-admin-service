@@ -3,7 +3,7 @@ import { ZodError, ZodSchema } from "zod";
 import { StatusCodes } from "http-status-codes";
 
 const validate =
-  (schema: ZodSchema<any>) =>
+  (schema: ZodSchema<unknown>) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.body);

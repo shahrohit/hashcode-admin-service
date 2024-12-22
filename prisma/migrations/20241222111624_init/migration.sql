@@ -5,12 +5,7 @@ CREATE TYPE "Difficulty" AS ENUM ('Basic', 'Easy', 'Medium', 'Hard');
 CREATE TABLE "Language" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "version" TEXT NOT NULL,
-    "extension" TEXT NOT NULL,
-    "compileCmd" TEXT,
-    "executeCmd" TEXT NOT NULL,
-    "options" TEXT,
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "lang" TEXT NOT NULL,
 
     CONSTRAINT "Language_pkey" PRIMARY KEY ("id")
 );
@@ -25,7 +20,6 @@ CREATE TABLE "Problem" (
     "sampleTestcases" TEXT[],
     "parameterName" TEXT NOT NULL,
     "editorial" TEXT,
-    "memoryLimit" DOUBLE PRECISION NOT NULL,
     "timeLimit" DOUBLE PRECISION NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -71,8 +65,6 @@ CREATE TABLE "Admin" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "lastLogin" TIMESTAMP(3),
-    "lastLoginAddress" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -84,6 +76,9 @@ CREATE TABLE "_ProblemTopics" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Language_lang_key" ON "Language"("lang");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Problem_slug_key" ON "Problem"("slug");

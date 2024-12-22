@@ -57,16 +57,16 @@ const updateActiveStatus = async (slug: string, isActive: boolean) => {
   return await problemRepository.updateActiveStatus(slug, isActive);
 };
 
-const deleteProblem = async (slug: string, data: TProblem) => {
-  return await problemRepository.deleteProblem(slug, data);
+const deleteProblem = async (slug: string) => {
+  return await problemRepository.deleteProblem(slug);
 };
 
-const deleteProblemTestcase = async (id: number, data: TProblemTestcase) => {
-  return await problemRepository.deleteProblemTestcase(id, data);
+const deleteProblemTestcase = async (id: number) => {
+  return await problemRepository.deleteProblemTestcase(id);
 };
 
-const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
-  return await problemRepository.deleteProblemCode(id, data);
+const deleteProblemCode = async (id: number) => {
+  return await problemRepository.deleteProblemCode(id);
 };
 
 // --------------------- User --------------------------

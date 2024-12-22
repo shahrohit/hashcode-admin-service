@@ -12,7 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
 
     "baseUrl": ".",
     "paths": {

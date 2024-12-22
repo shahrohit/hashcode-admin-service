@@ -1,4 +1,4 @@
-import { Forbidden, Unauthorized } from "@/utils/errors";
+import { Forbidden } from "@/utils/errors";
 import { ADMIN, ROLE_HEADER } from "@/utils/strings";
 
 import {

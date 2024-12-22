@@ -199,19 +199,19 @@ const updateActiveStatus = async (slug: string, isActive: boolean) => {
   });
 };
 
-const deleteProblem = async (slug: string, data: TProblem) => {
+const deleteProblem = async (slug: string) => {
   await prisma.problem.delete({
     where: { slug: slug },
   });
 };
 
-const deleteProblemTestcase = async (id: number, data: TProblemTestcase) => {
+const deleteProblemTestcase = async (id: number) => {
   await prisma.testcase.delete({
     where: { id: id },
   });
 };
 
-const deleteProblemCode = async (id: number, data: TProblemLangCode) => {
+const deleteProblemCode = async (id: number) => {
   await prisma.code.delete({
     where: { id: id },
   });

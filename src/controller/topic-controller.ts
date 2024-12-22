@@ -10,7 +10,7 @@ import { NotFound } from "@utils/errors";
 import { CREATED, DELETED, GET, UPDATED } from "@/utils/strings";
 
 import { type TTopic } from "@schemas/topic-schema";
-import checkPrimaryKey from "@/utils/check-primaryKey";
+import checkPrimarykey from "@utils/check-primarykey";
 
 const createTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -64,7 +64,7 @@ const getTopic = async (req: Req, res: Res, next: NextFn) => {
 
 const updateTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.slug);
+    const id = checkPrimarykey(req.params.slug);
     if (!id) throw new NotFound("Topic doesnot Exist");
 
     const data = req.body as TTopic;
@@ -83,7 +83,7 @@ const updateTopic = async (req: Req, res: Res, next: NextFn) => {
 
 const deleteTopic = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.slug);
+    const id = checkPrimarykey(req.params.slug);
     if (!id) throw new NotFound("Topic doesnot Exist");
 
     await topicService.deleteTopic(id);

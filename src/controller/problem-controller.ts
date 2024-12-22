@@ -6,7 +6,6 @@ import {
 import { StatusCodes } from "http-status-codes";
 
 import problemService from "@services/problem-service";
-import checkPrimaryKey from "@utils/check-primaryKey";
 import { BadRequest, NotFound } from "@utils/errors";
 import { CREATED, DELETED, GET, UPDATED } from "@/utils/strings";
 
@@ -15,6 +14,7 @@ import {
   type TProblemLangCode,
   type TProblemTestcase,
 } from "@schemas/problem-schema";
+import checkPrimarykey from "@utils/check-primarykey";
 
 const createProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
@@ -54,7 +54,7 @@ const createProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
 const createProblemCode = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
-    const langId = checkPrimaryKey(req.params.langId);
+    const langId = checkPrimarykey(req.params.langId);
     const body = req.body as TProblemLangCode;
     if (!slug) throw new NotFound("Problem Not Found");
 
@@ -143,7 +143,7 @@ const getProblemTestcases = async (req: Req, res: Res, next: NextFn) => {
 const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
   try {
     const slug = req.params.slug;
-    const langId = checkPrimaryKey(req.params.langId);
+    const langId = checkPrimarykey(req.params.langId);
     if (!slug) throw new NotFound("Problem Not Found");
 
     const response = await problemService.getProblemCodes(slug, langId);
@@ -161,7 +161,7 @@ const getProblemCodes = async (req: Req, res: Res, next: NextFn) => {
 
 const updateProblem = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.slug);
+    const id = checkPrimarykey(req.params.slug);
     if (!id) throw new NotFound("Problem Not Found");
 
     const body = req.body as TProblem;
@@ -180,7 +180,7 @@ const updateProblem = async (req: Req, res: Res, next: NextFn) => {
 
 const updateProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
     if (!id) throw new NotFound("Problem Testcase Not Found");
 
     const body = req.body as TProblemTestcase;
@@ -199,7 +199,7 @@ const updateProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
 
 const updateProblemCode = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
     if (!id) throw new NotFound("Problem Code Not Found");
 
     const body = req.body as TProblemLangCode;
@@ -243,8 +243,7 @@ const deleteProblem = async (req: Req, res: Res, next: NextFn) => {
     const slug = req.params.slug;
     if (!slug) throw new NotFound("Problem Not Found");
 
-    const body = req.body as TProblem;
-    await problemService.deleteProblem(slug, body);
+    await problemService.deleteProblem(slug);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -259,11 +258,10 @@ const deleteProblem = async (req: Req, res: Res, next: NextFn) => {
 
 const deleteProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
     if (!id) throw new NotFound("Problem Testcase Not Found");
 
-    const body = req.body as TProblemTestcase;
-    await problemService.deleteProblemTestcase(id, body);
+    await problemService.deleteProblemTestcase(id);
 
     res.status(StatusCodes.OK).json({
       succcess: true,
@@ -278,11 +276,10 @@ const deleteProblemTestcase = async (req: Req, res: Res, next: NextFn) => {
 
 const deleteProblemCode = async (req: Req, res: Res, next: NextFn) => {
   try {
-    const id = checkPrimaryKey(req.params.id);
+    const id = checkPrimarykey(req.params.id);
     if (!id) throw new NotFound("Problem Code Not Found");
 
-    const body = req.body as TProblemLangCode;
-    await problemService.deleteProblemCode(id, body);
+    await problemService.deleteProblemCode(id);
 
     res.status(StatusCodes.OK).json({
       succcess: true,

@@ -2,6 +2,7 @@ import prisma from "@config/db-config";
 import { Conflict, Unauthorized } from "@utils/errors";
 import { TLoginAdmin, TRegisterAdmin } from "@schemas/auth-schema";
 import { generateHashPassword, verifyPassword } from "@utils/fn";
+import { ADMIN } from "@/utils/strings";
 
 const register = async (data: TRegisterAdmin) => {
   const admin = await prisma.admin.findUnique({ where: { email: data.email } });
@@ -24,18 +25,12 @@ const login = async (data: TLoginAdmin) => {
   const isValidPw = await verifyPassword(data.password, admin.password);
   if (!isValidPw) throw new Unauthorized("Invalid Credentail");
 
-  return await prisma.admin.update({
-    where: { email: data.email },
-    data: {
-      lastLogin: new Date(),
-    },
-    select: {
-      name: true,
-      email: true,
-      lastLogin: true,
-      lastLoginAddress: true,
-    },
-  });
+  return {
+    name: admin.name,
+    email: admin.email,
+    username: "ADMIN",
+    role: ADMIN,
+  };
 };
 
 const authRepository = {

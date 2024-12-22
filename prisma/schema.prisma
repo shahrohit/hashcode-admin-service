@@ -86,8 +86,6 @@ model Admin {
     name              String
     email             String    @unique
     password          String
-    lastLogin         DateTime?
-    lastLoginAddress  String?
     createdAt         DateTime  @default(now())
     updatedAt         DateTime  @updatedAt
 
