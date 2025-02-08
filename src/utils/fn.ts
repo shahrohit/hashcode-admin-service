@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // ----------------- Hashed Password -------------------------------
 export const generateHashPassword = async (password: string) => {
